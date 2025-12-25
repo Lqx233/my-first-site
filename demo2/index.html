@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo 2 - AI 文本生成器</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+        }
+        
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end);
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- 顶部导航 -->
+    <nav class="bg-white shadow-md py-4 px-6">
+        <div class="max-w-6xl mx-auto flex items-center">
+            <a href="../index.html" class="text-purple-600 hover:text-purple-800 transition">
+                <i class="fas fa-arrow-left mr-2"></i>返回主页
+            </a>
+        </div>
+    </nav>
+    
+    <!-- 主内容区 -->
+    <main class="max-w-4xl mx-auto px-4 py-16">
+        <div class="gradient-bg text-white rounded-2xl shadow-2xl p-12 text-center">
+            <div class="mb-8">
+                <i class="fas fa-brain text-8xl opacity-80"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                AI 文本生成器
+            </h1>
+            <p class="text-xl opacity-90 mb-8">
+                这是一个 AI 编程示例，展示如何使用大语言模型 API 生成文本
+            </p>
+            
+            <!-- AI 文本生成界面 -->
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-3xl mx-auto">
+                <div class="mb-6">
+                    <label for="prompt" class="block text-left font-bold text-lg mb-2">输入你的提示词：</label>
+                    <textarea id="prompt" 
+                              class="w-full rounded-lg p-4 border-none shadow-inner focus:ring-2 focus:ring-white focus:outline-none" 
+                              rows="3" 
+                              placeholder="例如：写一首关于春天的短诗...">
+我需要一个关于AI编程的简单示例。请解释如何在网页中集成AI功能。</textarea>
+                </div>
+                
+                <div class="mb-6">
+                    <button id="generateBtn" 
+                            class="bg-white text-purple-600 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 w-full">
+                        <i class="fas fa-magic mr-2"></i>生成文本
+                    </button>
+                </div>
+                
+                <div id="loading" class="hidden mb-6">
+                    <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+                    <p class="text-lg">AI 正在生成内容...</p>
+                </div>
+                
+                <div id="result" class="bg-white text-purple-900 rounded-lg p-6 shadow-inner text-left">
+                    <h3 class="font-bold text-lg mb-3">AI 生成结果：</h3>
+                    <p id="generatedText" class="leading-relaxed">
+                        <!-- 生成的文本将显示在这里 -->
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 代码说明区域 -->
+        <div class="mt-12 bg-white rounded-lg shadow-xl p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                <i class="fas fa-code mr-2 text-purple-600"></i>AI 编程示例说明
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">1. 技术栈</h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>HTML5 + CSS3</li>
+                            <li>Tailwind CSS (样式框架)</li>
+                            <li>FontAwesome (图标库)</li>
+                            <li>JavaScript (交互逻辑)</li>
+                            <li>OpenAI API (或其他 AI 服务 API)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">2. 核心代码示例</h3>
+                    <div class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto">
+                        <pre><code>// AI API 调用示例
+async function generateText(prompt) {
+    // 这里需要替换为你的实际 API 调用代码
+    // 以下是 OpenAI API 调用示例：
+    
+    /*
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_API_KEY' // 替换为你的 API Key
+        },
+        body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 500
+        })
+    });
+    
+    const data = await response.json();
+    return data.choices[0].message.content;
+    */
+    
+    // 模拟 AI 生成结果
+    const mockResponses = [
+        "要在网页中集成AI功能，你可以按照以下步骤操作：\n1. 选择合适的AI服务提供商（如OpenAI、Google AI等）\n2. 获取API密钥并了解API文档\n3. 在网页中使用JavaScript发起API请求\n4. 处理API响应并在页面上展示结果\n5. 添加用户交互界面，让用户可以输入提示词\n\n关键代码包括：\n- 使用fetch或axios发起HTTP请求\n- 处理异步响应\n- 实现加载状态和错误处理",
+        "AI编程其实很简单！核心步骤是：\n\n1. **获取API密钥**：从AI服务提供商获取API密钥\n2. **构建请求**：准备请求参数，包括模型选择、提示词等\n3. **发送请求**：使用JavaScript发送HTTP请求到AI API\n4. **处理响应**：解析API返回的数据并展示\n5. **优化体验**：添加加载动画、错误处理等\n\n记得保护好你的API密钥，不要直接暴露在前端代码中！",
+        "网页集成AI功能的基本流程：\n\n1. **选择AI服务**：根据需求选择文本生成、图像生成或其他AI服务\n2. **阅读文档**：了解API的使用方法和参数要求\n3. **前端实现**：\n   - 创建用户输入界面\n   - 编写API调用代码\n   - 处理响应数据\n   - 更新UI显示结果\n4. **测试优化**：测试不同的提示词和参数，优化生成效果\n\n提示：对于生产环境，建议使用后端代理来保护API密钥。"
+    ];
+    
+    // 模拟网络延迟
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // 返回随机模拟响应
+    return mockResponses[Math.floor(Math.random() * mockResponses.length)];
+}
+
+// 事件监听
+document.getElementById('generateBtn').addEventListener('click', async () => {
+    const prompt = document.getElementById('prompt').value;
+    const generateBtn = document.getElementById('generateBtn');
+    const loading = document.getElementById('loading');
+    const generatedText = document.getElementById('generatedText');
+    
+    // 验证输入
+    if (!prompt.trim()) {
+        alert('请输入提示词！');
+        return;
+    }
+    
+    // 更新UI状态
+    generateBtn.disabled = true;
+    loading.classList.remove('hidden');
+    generatedText.textContent = '';
+    
+    try {
+        // 调用AI生成函数
+        const result = await generateText(prompt);
+        
+        // 显示结果
+        generatedText.textContent = result;
+    } catch (error) {
+        console.error('生成失败:', error);
+        generatedText.textContent = '抱歉，生成失败。请稍后重试。';
+    } finally {
+        // 恢复UI状态
+        generateBtn.disabled = false;
+        loading.classList.add('hidden');
+    }
+});</code></pre>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">3. 如何扩展</h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>集成真实的 AI API (如 OpenAI、Google Gemini 等)</li>
+                            <li>添加更多参数控制 (如生成长度、温度等)</li>
+                            <li>实现多轮对话功能</li>
+                            <li>添加文本格式控制 (如段落、列表等)</li>
+                            <li>优化移动端体验</li>
+                            <li>添加深色模式支持</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">4. 安全提示</h3>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                        <p class="text-yellow-800">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> 
+                            重要提醒：在生产环境中，不要将 API 密钥直接存储在前端代码中！
+                            建议使用后端服务器作为中间层来调用 AI API，以保护你的密钥安全。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="max-w-6xl mx-auto text-center px-4">
+            <p class="text-gray-400 text-sm">
+                <i class="fas fa-code mr-2"></i>
+                AI 文本生成器 - AI 编程示例
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 示例代码已内联在HTML中
+        });
+    </script>
+</body>
+</html>
