@@ -1,0 +1,366 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>智习空间 SmartStudy</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">SS</div>
+          <div class="brand-meta">
+            <div class="brand-title">智习空间</div>
+            <div class="brand-subtitle">自习室预约 · 计时 · 管理</div>
+          </div>
+        </div>
+        <nav class="mode-switch">
+          <button class="mode-btn is-active" data-mode="user">用户端</button>
+          <button class="mode-btn" data-mode="merchant">商家端</button>
+        </nav>
+        <div class="auth-actions">
+          <label class="privacy-consent">
+            <input type="checkbox" id="privacy-consent" />
+            <span>我已阅读并同意隐私协议</span>
+          </label>
+          <button class="ghost small" id="login-client">用户登录</button>
+          <button class="ghost small" id="login-merchant">商家登录</button>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="panel user-panel is-active" data-panel="user">
+          <div class="panel-header">
+            <div>
+              <h1>选座预约</h1>
+              <p>可视化座位布局 · 实时状态 · 透明计费</p>
+            </div>
+            <div class="store-pill">
+              <span class="dot"></span>
+              东校区自习空间
+            </div>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-group">
+              <span class="filter-label">状态</span>
+              <div class="filter-chips" id="status-filters"></div>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">标签</span>
+              <div class="filter-chips" id="tag-filters"></div>
+            </div>
+            <button class="ghost small" id="clear-filters">清除筛选</button>
+          </div>
+          <div class="panel-body">
+            <div class="map-card">
+              <div class="map-toolbar">
+                <div class="legend">
+                  <span class="legend-item">
+                    <i class="legend-dot available"></i>空闲可选
+                  </span>
+                  <span class="legend-item">
+                    <i class="legend-dot reserved"></i>已预约
+                  </span>
+                  <span class="legend-item">
+                    <i class="legend-dot in-use"></i>使用中
+                  </span>
+                  <span class="legend-item">
+                    <i class="legend-dot maintenance"></i>维护中
+                  </span>
+                </div>
+                <div class="map-actions">
+                  <button class="ghost" id="reset-view">重置视图</button>
+                </div>
+              </div>
+              <div class="map-shell">
+                <svg
+                  id="user-map"
+                  class="seat-map"
+                  viewBox="0 0 1000 600"
+                ></svg>
+              </div>
+            </div>
+            <aside class="side-card">
+              <div class="side-header">
+                <h2>预约面板</h2>
+                <span class="hint">请选择座位开始</span>
+              </div>
+              <div class="seat-detail" id="user-seat-detail">
+                <div class="empty-state">
+                  <div class="empty-icon"></div>
+                  未选择座位
+                </div>
+              </div>
+              <div class="divider"></div>
+              <form class="booking-form" id="booking-form">
+                <label>
+                  日期
+                  <input type="date" name="date" required />
+                </label>
+                <label>
+                  开始时间
+                  <input type="time" name="start" required />
+                </label>
+                <label>
+                  时长（小时）
+                  <input type="number" name="duration" min="1" max="12" value="2" />
+                </label>
+                <div class="price-line">
+                  <span>预估费用</span>
+                  <strong id="price-estimate">¥0</strong>
+                </div>
+                <div class="rule-hint">
+                  取消规则：距开始时间 30 分钟内取消收取 20% 手续费。
+                </div>
+                <div class="rule-hint">
+                  计费规则：按分钟计费，向下取整结算。
+                </div>
+                <button class="primary" type="submit" id="reserve-btn">立即预约</button>
+                <button class="ghost" type="button" id="view-order">查看订单详情</button>
+              </form>
+              <div class="divider"></div>
+              <div class="session-card" id="session-card">
+                <div class="session-header">
+                  <h3>进行中</h3>
+                  <span class="status-pill">未开始</span>
+                </div>
+                <div class="timer">
+                  <div class="timer-value" id="timer-value">00:00:00</div>
+                  <div class="timer-meta" id="timer-meta">暂无进行中订单</div>
+                </div>
+                <div class="session-actions">
+                  <button class="ghost" id="start-session">到店开始</button>
+                  <button class="ghost" id="extend-session">延长时间</button>
+                  <button class="danger" id="end-session">结束使用</button>
+                </div>
+                <div class="session-log" id="session-log"></div>
+              </div>
+              <div class="divider"></div>
+              <div class="card-section">
+                <div class="section-header">
+                  <h3>卡券推荐</h3>
+                  <span class="hint">支持周卡/月卡/季卡/年卡</span>
+                </div>
+                <div class="card-grid">
+                  <div class="membership-card">
+                    <div class="card-title">周卡</div>
+                    <div class="card-price">¥128</div>
+                    <div class="card-meta">每日 2 小时 · 7 天</div>
+                    <button class="primary small purchase-btn" data-card="周卡">立即购买</button>
+                  </div>
+                  <div class="membership-card">
+                    <div class="card-title">月卡</div>
+                    <div class="card-price">¥399</div>
+                    <div class="card-meta">每日 4 小时 · 30 天</div>
+                    <button class="primary small purchase-btn" data-card="月卡">立即购买</button>
+                  </div>
+                  <div class="membership-card">
+                    <div class="card-title">季卡</div>
+                    <div class="card-price">¥999</div>
+                    <div class="card-meta">每日 4 小时 · 90 天</div>
+                    <button class="primary small purchase-btn" data-card="季卡">立即购买</button>
+                  </div>
+                  <div class="membership-card">
+                    <div class="card-title">年卡</div>
+                    <div class="card-price">¥2880</div>
+                    <div class="card-meta">不限次 · 365 天</div>
+                    <button class="primary small purchase-btn" data-card="年卡">立即购买</button>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel merchant-panel" data-panel="merchant">
+          <div class="panel-header">
+            <div>
+              <h1>图纸编辑器</h1>
+              <p>拖拽式布局编辑 · 版本管理 · 一键发布</p>
+            </div>
+            <div class="version-pill" id="version-pill">草稿</div>
+          </div>
+          <div class="panel-body">
+            <div class="map-card">
+              <div class="map-toolbar">
+                <div class="editor-actions">
+                  <button class="primary" id="add-seat">新增座位</button>
+                  <button class="ghost" id="add-wall">新增墙体</button>
+                  <button class="ghost" id="add-door">新增门</button>
+                  <button class="ghost" id="add-window">新增窗</button>
+                  <button class="ghost" id="add-aisle">新增通道</button>
+                  <button class="ghost" id="save-draft">保存草稿</button>
+                  <button class="ghost" id="publish-layout">发布上架</button>
+                  <button class="danger" id="delete-item">删除所选</button>
+                </div>
+                <div class="map-actions">
+                  <button class="ghost" id="toggle-grid">网格开关</button>
+                </div>
+              </div>
+              <div class="map-shell">
+                <svg
+                  id="merchant-map"
+                  class="seat-map"
+                  viewBox="0 0 1000 600"
+                ></svg>
+              </div>
+            </div>
+            <aside class="side-card">
+              <div class="side-header">
+                <h2>属性设置</h2>
+                <span class="hint">选择组件后编辑</span>
+              </div>
+              <div class="switch-card">
+                <div>
+                  <h4>国际短信开关</h4>
+                  <div class="hint">默认仅允许 +86 号码</div>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="intl-sms-toggle" />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+              <div class="seat-detail" id="merchant-seat-detail">
+                <div class="empty-state">
+                  <div class="empty-icon"></div>
+                  未选择组件
+                </div>
+              </div>
+              <div class="divider"></div>
+              <form class="booking-form" id="seat-form">
+                <label>
+                  座位编号
+                  <input type="text" name="id" required />
+                </label>
+                <label>
+                  名称
+                  <input type="text" name="name" />
+                </label>
+                <label>
+                  状态
+                  <select name="status">
+                    <option value="available">空闲</option>
+                    <option value="reserved">已预约</option>
+                    <option value="in_use">使用中</option>
+                    <option value="maintenance">维护中</option>
+                  </select>
+                </label>
+                <label>
+                  单价（元/小时）
+                  <input type="number" name="price" min="0" step="0.1" />
+                </label>
+                <label>
+                  标签（逗号分隔）
+                  <input type="text" name="tags" />
+                </label>
+                <button class="primary" type="submit">更新座位</button>
+              </form>
+              <form class="booking-form is-hidden" id="wall-form">
+                <label>
+                  布局编号
+                  <input type="text" name="id" required />
+                </label>
+                <label>
+                  宽度
+                  <input type="number" name="width" min="20" />
+                </label>
+                <label>
+                  高度
+                  <input type="number" name="height" min="20" />
+                </label>
+                <button class="primary" type="submit">更新布局</button>
+              </form>
+              <div class="divider"></div>
+              <div class="session-log" id="editor-log"></div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal" id="order-modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>订单详情</h3>
+          <button class="ghost small" id="close-modal">关闭</button>
+        </div>
+        <div class="modal-body" id="order-detail"></div>
+        <div class="modal-footer">
+          <button class="ghost" id="cancel-order">取消订单</button>
+          <button class="primary" id="confirm-order">确认支付</button>
+        </div>
+        <div class="modal-note">
+          取消规则：距开始时间 30 分钟内取消收取 20% 手续费，超时不可取消。
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop" id="auth-backdrop"></div>
+    <div class="modal" id="auth-modal" role="dialog" aria-modal="true">
+      <div class="modal-card auth-card">
+        <div class="modal-header">
+          <h3 id="auth-title">账号登录</h3>
+          <button class="ghost small" id="close-auth">关闭</button>
+        </div>
+        <div class="auth-body">
+          <div class="auth-section" id="auth-gateway">
+            <div class="auth-row">
+              <strong>运营商一键登录</strong>
+              <span class="hint" id="auth-gateway-status">检测中...</span>
+            </div>
+            <button class="primary" id="auth-gateway-btn">一键登录</button>
+            <button class="ghost small" id="auth-fallback-btn">改用短信验证码</button>
+          </div>
+          <div class="auth-section" id="auth-sms">
+            <label class="auth-label">
+              手机号
+              <div class="auth-row phone-row">
+                <select id="auth-country">
+                  <option value="+86">+86 中国</option>
+                  <option value="+852">+852 香港</option>
+                  <option value="+853">+853 澳门</option>
+                  <option value="+886">+886 台湾</option>
+                  <option value="+1">+1 美国/加拿大</option>
+                  <option value="+44">+44 英国</option>
+                  <option value="+61">+61 澳大利亚</option>
+                  <option value="+81">+81 日本</option>
+                </select>
+                <input type="tel" id="auth-phone" placeholder="请输入手机号" />
+              </div>
+            </label>
+            <label class="auth-label slider-check">
+              <input type="checkbox" id="auth-slider" />
+              <span>已通过滑动验证</span>
+            </label>
+            <div class="auth-row">
+              <label class="auth-label">
+                验证码
+                <input type="text" id="auth-code" placeholder="6 位验证码" />
+              </label>
+              <button class="ghost small" id="auth-send-code">发送验证码</button>
+            </div>
+            <label class="auth-label" id="auth-invite-wrap">
+              邀请码（商家端可选）
+              <input type="text" id="auth-invite" placeholder="填写邀请码或留空审核" />
+            </label>
+            <div class="auth-note">
+              商家端登录需完成资料审核或邀请码验证。
+            </div>
+            <div class="auth-note" id="auth-international-note">
+              当前为非本地号码，已自动切换至短信验证。
+            </div>
+            <button class="primary" id="auth-verify-btn">验证并登录</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
